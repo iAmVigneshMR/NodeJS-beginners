@@ -1,0 +1,477 @@
+Day 1:
+--------------------------------
+Topics : Basic, Introduction, REPL commands, Create simple Js files, using Arrays in js.
+What is NodeJs?
+> Its an open source, cross-platform, javascript runtime environment and library.
+> We can run web application outside client browser.
+(What is open-source?
+> Its a sw that is disturted source code .
+What is cross-platform?
+> We Can run any OS.
+What is javascript runtime envirnment?
+> All browser can run a js code.
+
+What is Javascript Library?
+> Library contains some prewritten code to complete some task.
+> We can use that prewritten code by importing the modules.
+
+NodeJs= Runtime Env + javascript  Lib
+--------------------------------------
+Features of Node Js
+----------------------------------------
+> High performance, Scalablity, Easy to Learn, Improves response time and loading  files, 
+Large community is supporting.
+
+Big player using NodeJs
+-----------------------
+LinkedIn, Netflix, Uber, payPal, NASA, eBay, GoDaddy , Mozilla and walmart.
+
+
+HTML, CSS, Js, Bootstrap - Frontend sw
+Ruby, Php, python, Java and C# -Backend sw.
+
+NodeJs - support both frontend and backend sw.
+-----------------------------------
+
+Javascript 
+1. clienside sw
+2. Scripting lang
+3. can run inside browser
+4. Provides behaviour to html and css.
+
+NodeJs
+1. Client ans serverside sw
+2. Not a language and not a framework. It contains js Library.
+3. can run outside browser.
+4. Can perform server function like file handling, exception handling and database connectivity.
+----------------------------------------------
+Steps to Working in Nodejs
+1. download nodejs.
+2. init npm
+>npm init
+
+--------------------------------------
+REPL - Read Evaluate Print Loop
+-------------------------------------
+Modules :
+
+
+What is Modules?
+> A modules is a piece of reusuable javascript code.
+> It could be a .js file. It should store in a dir
+> We can export the content to other files  also.
+> Use of Module is - DRY - (Don't repeat yourself)
+
+
+There are 3 types of Modules
+1. Buildin Modules
+Example 1: 
+const O=require('node:os'); // os - Buildin Module
+console.log(O.hostname());
+console.log(O.machine());
+console.log(O.release());
+console.log(O.totalmem());
+console.log(O.version());
+
+2. custom modules
+Example 1:
+Create circle.js file:
+const {PI} = Math;
+exports.ar =(r) => PI * r**2;
+exports.cir = (r) =>2 *PI *r;
+
+use the above file in another js file:
+
+const c=require('./circle.js');
+console.log(c.ar(5));
+console.log(c.cir(4));
+
+Example 2:
+Create a folder - aggregate and save index.js file with the following code:
+
+class Emp
+{
+    constructor(name,code)
+    {
+        this.name = name;
+        this.code=code;
+    }
+}
+const allEmp=[new Emp('Nandhini','0523'),
+new Emp('Yavana','193'),
+new Emp('Sathish','195')];
+
+exports.getRandomEmps=()=>
+{
+    return allEmp[Math.floor(Math.random()*allEmp.length)];
+}
+exports.allEmp = allEmp;
+
+create a file outside of aggregate folder:
+
+const { getRandomEmps } = require('./aggregate');
+
+console.log(getRandomEmps());
+const { ar, cir } = require('./aggregate/circle');
+ 
+console.log(ar(10));
+console.log(cir(5));
+3. Third party modules
+
+
+// Arrays using Functions
+// Internal function
+let arr1=['Gupta','Tamil','Vignesh'];
+//let fun1=function(e)
+let fun1=function(e,idx,arr)
+{
+    console.log(idx + ":" +  e + "-" +  arr[idx]);
+}
+arr1.forEach(fun1);
+// forEach - enhanced for loop
+// no need to initial value, condition checking and incre/decre
+// Specially designed for arrays and objects
+// if pass an array / obj ,
+//it takes the elements from starting to ending one by one
+
+------------------------------------------------------------------------
+Day 2:
+
+CRUD
+--------------------------------
+create Read Update and Delete - db, excel , word, text (File)
+
+SW - 
+MY Sql, Oracle, SQL server, MS Access, MongoDB ,  Db2 , DBeaver etc ....
+
+Database - It should be relevant of project
+ 
+Table / Collection (MongoDB)
+
+Records / Document (MongoDB)
+
+-----------------------------------
+
+//node install prompt-sync
+const prompt= require('prompt-sync')(); // import build in module
+const MongoClient= require('mongodb').MongoClient; // import mongodb
+
+async function InsertDB(){ // creating afunction to connect with db and insert documents
+   // connection string of MongoDB atlas
+    //const url='mongodb+srv://Aggre:Aggre123@mycluster.zths26b.mongodb.net/NodeDB';
+    const url='mongodb://localhost:27017/May5';
+  
+    // connecting with Mongodb atlas
+    const client=await MongoClient.connect(url);
+    const db=client.db();
+
+    console.log('Connected with MongoDB Database');
+    const coll=db.collection('nodeemp');
+// used to get input from the user
+const eid=prompt('Enter Emp Id :');
+const ename=prompt('Enter Emp Name :');
+const mail=prompt('Enter Email :');
+const sal=prompt('Enter Salary :');
+const result =await coll.insertOne({empid:eid,empname:ename,email:mail,salary:sal});
+console.log('Document inserted successfully');
+console.log(result);
+} 
+InsertDB();
+------------------------------------
+
+//node install prompt-sync
+const prompt= require('prompt-sync')(); // import build in module
+const MongoClient= require('mongodb').MongoClient; // import mongodb
+
+async function ReadDB(){ // creating afunction to connect with db and insert documents
+   // connection string of MongoDB atlas
+    //const url='mongodb+srv://Aggre:Aggre123@mycluster.zths26b.mongodb.net/NodeDB';
+    const url='mongodb://localhost:27017/May5';
+    // connecting with Mongodb atlas
+    const client=await MongoClient.connect(url);
+    const db=client.db();
+
+    const coll=db.collection('nodeemp');
+    const data=await coll.find({}).toArray();
+    console.log(data);
+} 
+ReadDB();
+--------------------------------------
+//node install prompt-sync
+const prompt= require('prompt-sync')(); // import build in module
+const MongoClient= require('mongodb').MongoClient; // import mongodb
+
+async function UpdateDB(){ // creating afunction to connect with db and insert documents
+   // connection string of MongoDB atlas
+   // const url='mongodb+srv://Aggre:Aggre123@mycluster.zths26b.mongodb.net/NodeDB';
+   const url='mongodb://localhost:27017/May5';
+   // connecting with Mongodb atlas
+    const client=await MongoClient.connect(url);
+    const db=client.db();
+
+    console.log('Connected with MongoDB Database');
+    const coll=db.collection('nodeemp');
+// used to get input from the user
+const eid=prompt('Enter Emp Id :');
+const ename=prompt('Enter Emp Name :');
+const mail=prompt('Enter Email :');
+const sal=prompt('Enter Salary :');
+const result =await coll.updateOne({empid:eid},
+    {$set:{empname:ename,email:mail,salary:sal}});
+console.log('Document updated successfully');
+console.log(result);
+} 
+UpdateDB();
+-----------------------------------
+//node install prompt-sync
+const prompt= require('prompt-sync')(); // import build in module
+const MongoClient= require('mongodb').MongoClient; // import mongodb
+
+async function DeleteDB(){ // creating afunction to connect with db and insert documents
+   // connection string of MongoDB atlas
+   // const url='mongodb+srv://Aggre:Aggre123@mycluster.zths26b.mongodb.net/NodeDB';
+   const url='mongodb://localhost:27017/May5';
+   // connecting with Mongodb atlas
+    const client=await MongoClient.connect(url);
+    const db=client.db();
+
+    console.log('Connected with MongoDB Database');
+    const coll=db.collection('nodeemp');
+// used to get input from the user
+const eid=prompt('Enter Emp Id :'); 
+const result =await coll.deleteOne({empid:eid});
+console.log('Document Deleted successfully');
+console.log(result);
+} 
+DeleteDB();
+
+
+----------------------------------------------------------------------------
+
+Day 3:
+Optimize the crud operations, Connect  a html page with NodeJs, Getting data from ahtml file for NodeJs Crud operations:
+
+What is code Optimization?
+1. We have to reduce no of lines.
+2. Minimize the use of expensive system calls, can avoid network Traffic.
+3. Remove unnessary Loop and constrol structure.
+
+ const prompt= require('prompt-sync')(); 
+    
+async function InsertDB(){ 
+    const client=await require('mongodb').MongoClient.connect('mongodb://localhost:27017/May9');
+     
+    console.log('Connected with MongoDB Database' ,await       client.db().collection('nodeemp').insertOne({empid:prompt('Enter Emp Id :'),
+    empname:prompt('Enter Emp Name :'),email:prompt('Enter Email :'),
+    salary:prompt('Enter Salary :')}),'Document inserted successfully');
+client.close();
+} 
+InsertDB();
+----------------------------------------------------------------------
+const prompt= require('prompt-sync')(); 
+  
+async function ReadDB()
+{       
+    const client=await require('mongodb').MongoClient.connect('mongodb://localhost:27017/May9');
+    console.log(await client.db().collection('nodeemp').find({}).toArray()); 
+} 
+ReadDB();
+---------------------------------------------------------------------
+ const prompt= require('prompt-sync')();    
+async function DeleteDB(){  
+
+    const client=await MongoClient.connect('mongodb://localhost:27017/May9');
+     
+    console.log('Connected with MongoDB Database\n',await client.db().collection('nodeemp').
+    deleteOne({empid:prompt('Enter Emp Id :')}),'\nDocument Deleted successfully');
+  
+} 
+DeleteDB();
+----------------------------------------------------------------------
+ 
+const prompt= require('prompt-sync')(); 
+async function UpdateDB(){       
+    const client=await require('mongodb').MongoClient.connect('mongodb://localhost:27017/May9');
+   
+console.log('Connected with MongoDB Database\n',
+await client.db().collection('nodeemp').updateOne({empid:prompt('Enter Emp Id :')},
+    {$set:{empname:prompt('Enter Emp Name :'),email:prompt('Enter Email :'),
+    salary:prompt('Enter Salary :')}}),'Document updated successfully\n');
+}
+UpdateDB();
+========================================================================
+Express Module.
+> Its a third part module. 
+> The express module is a web app framework.
+> It provides set of feature to build web apps and API.
+> Like routing, middleware support, request and response from/to webpage.
+
+
+Response has some http methods:
+1. Get (default), post , put, delete and patch.
+
+Example 1:
+const express=require('express');
+const app=express();
+
+app.get('/',(req,res) => {res.send("Welcome to my Home page.");});
+
+app.listen(3000, ()=>console.log("Server is running in port 3000"));
+
+// to run this code -  http://localhost:3000
+
+------------------------------------
+Example 2:
+
+Page2.html
+---------------
+<html>
+    <h1>This is Home Page</h1>
+</html>
+
+Page2.js
+---------------
+const express=require('express');
+const app=express();
+
+app.get('/',(req,res) => {
+    res.sendFile(__dirname +'/Page2.html');});
+
+app.listen(3000, ()=>console.log("Server is running in port 3000"));
+
+// to run this code -  http://localhost:3000
+-------------------------------------------------------------
+Example 3:
+
+Page3.html
+----------------
+<html>
+    <body>
+        <form action="/userdet" method="post">
+            <input type="text" id="username" name="username" />
+            <button type="submit" value="Submit" />
+        </form>
+    </body>
+</html>
+
+Page3.js
+-----------------
+const express=require('express');
+const app=express();
+//body=parse is middleare . It is used to  parse the form data
+const bodyParser=require('body-parser');
+let uname;
+// Used to convert html body controls to nodejs 
+app.use(bodyParser.urlencoded({extended:true}));
+app.get('/',(req,res) => {
+    res.sendFile(__dirname +'/Page3.html');});
+
+app.post('/userdet',(req,res)=>
+{
+uname= req.body.username;
+console.log("User Name is :  ", uname); // Terminal confimation
+res.send(`User Name is : ${uname}`); // Webpage msg
+});
+
+app.listen(3000, ()=>console.log("Server is running in port 3000"));
+
+// to run this code -  http://localhost:3000
+
+
+==========================================
+Crud operation using Webpage
+------------------------
+db.js
+const MongoClient=require('mongodb').MongoClient;
+let database;
+
+async function getDB()
+{
+    try{
+database=await MongoClient.connect('mongodb://localhost:27017/May9');
+console.log('Connected with Database ');
+    }
+    catch(err)
+    {
+        console.log(err);
+    }
+    return database;
+}
+module.exports ={getDB}
+---------------------
+
+<html>
+    <body>
+        <form action="/empdet" name="frm1" method="post">
+            Emp Name : <input type="text" name="ename" id="ename" /><br>
+            Emp Mail : <input type="text" name="email" id="email" /><br>
+
+            <input type="hidden" name="hdnbt" id="hdnbt" value="" / >
+            <input type="submit" value="Register" name="btnreg" 
+            onclick="{document.frm1.hdnbt.value=this.value; document.frm1.submit();}" />
+            <input type="submit" value="Update" name="btnupdate" 
+            onclick="{document.frm1.hdnbt.value=this.value; document.frm1.submit();}" />
+            <input type="submit" value="Delete" name="btndele" 
+            onclick="{document.frm1.hdnbt.value=this.value; document.frm1.submit();}" />
+      
+        </form>
+    </body>
+</html>
+------------------------------
+const dbo=require('./db');
+const express=require('express');
+const app=express();
+const bodyParser=require('body-parser');
+let empname,mail;
+// Used to convert html body controls to nodejs 
+app.use(bodyParser.urlencoded({extended:true}));
+app.get('/',(req,res) => {
+    res.sendFile(__dirname +'/crudform.html');});
+
+app.post('/empdet',(req,res)=>
+{
+    empname= req.body.ename;
+    mail= req.body.email; 
+    hnd=req.body.hdnb;
+
+    if (hnd=="Register")
+    {
+        result=InsertDB();
+        res.send('Record Inserted successfully');
+
+    }
+    if (hnd=="Update")
+    {
+        
+    }
+    if (hnd=="Delete")
+    {
+        
+    }
+});
+
+app.listen(3000, ()=>console.log("Server is running in port 3000"));
+
+ 
+async function InsertDB(){  
+    let database=await dbo.getDB();
+    res=await database.db().collection('nodeemp').insertOne({empname:empname,
+    empmail:mail})  ;
+    return res;
+} 
+// to run this code -  http://localhost:3000
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

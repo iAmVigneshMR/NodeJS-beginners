@@ -1,0 +1,163 @@
+wmic logicaldisk get caption
+lsblk -o Name,label
+df -H
+--------------------------------------------------------------------------------
+Topics
+How to get info from drives, available disk, Example, Exception handling
+------------------------------
+Example 1:
+// To get memory details of Local disk drive.
+
+const d=require('diskusage');
+//getDiskInfo('/'); // Ubuntu
+ getDiskInfo('D:\\'); // Windows
+async function getDiskInfo(drive)
+{
+    const info=await d.check(drive);
+    console.log('Total Memory : ', (info.total/(1024*1024*1024)).toFixed(2),' GB' );
+    console.log('Available Memory : ', (info.available/(1024*1024*1024)).toFixed(2),' GB' );
+    console.log('Used Memory : ', (info.total/(1024*1024*1024)-info.available/(1024*1024*1024)).toFixed(2),' GB' );
+}
+--------------------------------
+Example 2:
+// To get List of available Local disk Drives.
+
+>cmd to get disks in windows
+wmic logicaldisk get caption
+
+>cmt of ubuntu.
+df -H
+(or)
+lsblk -o Name,label
+
+const {execSync}=require('child_process');
+//Ubuntu command
+const drives=execSync('df -H').toString().trim().
+split('\n').slice(1).map(d=>d.trim());
+//Windows command
+const drives=execSync('wmic logicaldisk get caption').toString().trim().
+split('\n').slice(1).map(d=>d.trim());
+
+console.log('Disk Drive: ', drives);
+for (const drive of drives)
+{
+    console.log(drive);
+}
+-----------------------------------------------
+Example 3:
+//To get List of available local disk drives and Memory info
+
+const {execSync}=require('child_process');
+const d=require('diskusage'); 
+const drives=execSync('wmic logicaldisk get caption').toString().trim().
+split('\n').slice(1).map(d=>d.trim()); 
+for (const drive of drives)
+{
+    getDiskInfo(drive);
+}
+async function getDiskInfo(drive)
+{    
+    const info=await d.check(drive);
+    console.log(drive);
+    console.log('Total Memory : ', (info.total/(1024*1024*1024)).toFixed(2),' GB' );
+    console.log('Available Memory : ', (info.available/(1024*1024*1024)).toFixed(2),' GB' );
+    console.log('Used Memory : ', (info.total/(1024*1024*1024)-info.available/(1024*1024*1024)).toFixed(2),' GB' );
+    console.log('-----------------------------');
+}
+-------------------------------------------
+// To Get List of subfolders , files and read the content from given file name.
+home.html
+---------
+<html>
+
+    <body>
+        <form action="/folder" method="POST">
+            <input type="text" style="width:500px;" 
+            placeholder="Enter Folder Path : "
+            name="folder" />
+            <input type="submit" value="Get List" />
+        </form>
+        <form action="/files" method="POST">
+            <input type="text" style="width:500px;" 
+            placeholder="Enter File Path : "
+            name="files" />
+            <input type="submit" value="Read File" />
+        </form>
+    </body>
+</html>s
+
+Prg 10.js
+-------------
+const http=require('http');
+const express=require('express')
+const fs=require('fs')
+const path=require('path')
+const  bodyParser=require('body-parser')
+const app=express()
+const server=http.createServer(app);
+app.use(bodyParser.urlencoded({extended:true}));
+app.get('/',function(req,res){
+    res.sendFile(__dirname + '/home.html');
+})
+app.post('/folder',(req,res)=>{
+    folder=req.body.folder;
+    const files=getList(folder);
+    res.send(files);
+})
+app.post('/files',(req,res)=>{
+    files=req.body.files; 
+    fs.readFile(files ,'utf8',(err,data)=>
+    {
+        if(err){res.send('Error Reading file')}
+        else{res.send(data)}
+    })
+})
+function getList(dir)
+{
+    let res=`<h3>${dir}</h3>`
+const entries=fs.readdirSync(dir,{withFileTypes:true});
+for (const entry of entries)
+{
+    if (entry.isDirectory())
+    {
+        const subdir=getList(path.join(dir,entry.name));
+        res+=`&gt;<b>${subdir}</b><br>`;
+    }
+    else if (entry.isFile())
+    { 
+        res+=`&gt;<b>${entry.name}<b><br>`;
+    }
+} 
+return res;
+}
+server.listen(3000,()=>{
+    console.log('server is running')
+});
+-----------------------------------------
+Exception Handling
+----------------------------------------
+Three types of Error.
+
+1. Compile time error
+Missing semicolon, using undefined variable, missing blocks and more
+2. run time error.
+function arguments miss match,Type conversion error, file reading error, array index errror
+division by zero and more.
+3. Logical Error.
+Getting age more than 120.
+--------------------------
+In node Js can handle errors using 3 Techniques:
+1. Using Try catch
+2. Using promise 
+3. Using callback methods.
+--------------------------
+
+
+
+
+
+
+
+
+
+

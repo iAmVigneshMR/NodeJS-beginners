@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <form action="/empdet" name="frm1" method="post">
+        Emp Name : <input type="text" name="ename" id="ename" /><br>
+        Emp Mail : <input type="text" name="email" id="email" /><br>
+
+        <input type="hidden" name="hdnbt" id="hdnbt" value="" />
+        <input type="submit" value="Register" name="btnreg"
+            onclick="{document.frm1.hdnbt.value=this.value; document.frm1.submit();}" />
+        <input type="submit" value="Update" name="btnupdate"
+            onclick="{document.frm1.hdnbt.value=this.value; document.frm1.submit();}" />
+        <input type="submit" value="Delete" name="btndele"
+            onclick="{document.frm1.hdnbt.value=this.value; document.frm1.submit();}" />
+
+    </form>
+    <form action="/read" name="frm2" method="get">
+        <input type="submit" value="Read" name="btnRead" />
+    </form>
+</body>
+
+</html>

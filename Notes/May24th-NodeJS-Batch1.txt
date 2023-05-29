@@ -1,0 +1,127 @@
+Topics:
+Os, memory, dir,files, filesize and Tips prgs
+----------------------------------------------
+Example 1:
+
+const os=require('os');
+const pl=os.platform();
+console.log('Platform is : ',pl);
+// Get total system Ram Memory . By default it returns in bytes. 
+console.log('Total Memory' ,(os.totalmem()/(1024*1024*1024)).toFixed(2),' GB');
+// Get free Ram Memory . By default it returns in bytes. 
+console.log('Free Memory' ,(os.freemem()/(1024*1024*1024)).toFixed(2),' GB');
+//console.log('');
+----------------------------------------------
+Example 2:
+
+const os=require('os');
+const cpuCores=os.cpus();
+console.log('No of CPU : ',os.cpus().length); 
+cpuCores.forEach((cpu,index)=>{
+    console.log('CPU : ' , index+1);
+    console.log('Model : ',cpu.model);
+    console.log('Speed : ',cpu.speed);
+    //No of milliseconds cpu used .
+    console.log('Used Time : ',cpu.times.user);  
+    //No of milliseconds cpu not executing any task .  
+    console.log('Idle Time : ',cpu.times.idle);       
+    //No of milliseconds cpu executing kernel-level nehalf of OS .
+    console.log('System Time : ',cpu.times.sys);
+    console.log('---------------------');
+})
+--------------------------------------------------
+Example 3:
+
+const os=require('os');
+let nt=os.networkInterfaces();
+for(let i in nt){
+    console.log(i.toString());
+    console.log('Address : ', nt[i].map(a=> a.address))
+    console.log('Family : ', nt[i].map(a=> a.family))
+    console.log('Netmask : ', nt[i].map(a=> a.netmask))
+    console.log('CIDR : ', nt[i].map(a=> a.cidr))
+    console.log('mac : ', nt[i].map(a=> a.mac))
+    console.log('---------------------------------------------')
+    }  
+--------------------------------------------------------
+Example 4:
+
+const os = require('os'); 
+//Time of OS has Running.
+const up1=os.uptime();
+const hours=Math.floor(up1/3600);
+const Min=Math.floor(up1%3600)/60;
+console.log("Hour : ",hours,"Minute : ",Min);
+console.log("In Seconds : ",up1)
+-----------------------------------------------------------
+Example 5:
+
+const fs=require('fs'); // file stream - can handle folders and files
+const path=require('path') // File path
+const prompt=require('prompt-sync')();
+const dir=prompt('Enter Drive and Dir Name : ');
+
+const getFolder=(dirPath) =>{
+    return fs.readdirSync(dirPath).filter(file =>fs.statSync(path.join(dirPath,file)).
+    isDirectory())
+}
+const getFiles=(dirPath) =>{
+    return fs.readdirSync(dirPath).filter(file =>fs.statSync(path.join(dirPath,file)).
+    isFile())
+}
+console.log("Folders : \n ", getFolder(dir),"\n\n");
+console.log("Files : \n ", getFiles(dir));
+-----------------------------------------------------------
+const fs=require('fs'); // file stream - can handle folders and files
+const path=require('path') // File path
+const prompt=require('prompt-sync')();
+const dir=prompt('Enter Drive and Dir Name : ');
+function getFilesize(dirpath)
+{
+    fs.readdir(dirpath,(err,files)=>
+    {
+        if(err)
+        {
+            console.err('Error Reading dir : ',err);
+            return;
+        }
+        files.forEach((file)=>{
+            const filepath=path.join(dirpath,file);
+            fs.stat(filepath,(err,stats)=>{
+                if(err)
+                {
+                    console.err('Error Reading files : ',err);
+                return;
+                }
+                if(stats.isFile())
+                {
+                     var si=stats.size;
+                    if(si<1024)
+                    console.log('File Name : ',file,' File Size : ' ,si  + ' bytes.');
+                    else if(si>=1024 && si<1048576)
+                    console.log('File Name : ',file,' File Size : ' ,(si/1024).toFixed(2)  + ' KB.');
+                    else if(si>=1048576 && si<1073741824)
+                    console.log('File Name : ',file,' File Size : ' ,(si/(1024*1024)).toFixed(2)  + ' MB.');
+                    else  
+                    console.log('File Name : ',file,' File Size : ' ,(si/(1024*1024*1024)).toFixed(2)  + ' GB.');              
+                }
+            }          
+
+            )
+        })
+    })
+}
+getFilesize(dir);
+
+
+
+
+
+
+
+
+
+
+
+
+
